@@ -34,5 +34,60 @@
         <servlet-name>homeServlet</servlet-name>
         <url-pattern>/home</url-pattern>
     </servlet-mapping>
+    
+	<!-- WATCH PAGE -->	
+	<servlet>
+		<servlet-name>watchServlet</servlet-name>
+	    <servlet-class>com.lexyone.test.webapp.notebook.servlets.WatchUsersServlet</servlet-class>
+	</servlet>
+	
+    <servlet-mapping>
+        <servlet-name>watchServlet</servlet-name>
+        <url-pattern>/watch_users</url-pattern>
+    </servlet-mapping>
+
+	<!-- FIND PAGE -->	
+	<servlet>
+		<servlet-name>findServlet</servlet-name>
+	    <servlet-class>com.lexyone.test.webapp.notebook.servlets.FindUsersServlet</servlet-class>
+	</servlet>
+	
+    <servlet-mapping>
+        <servlet-name>findServlet</servlet-name>
+        <url-pattern>/find_users</url-pattern>
+    </servlet-mapping>
+
+	<!-- EDIT PAGE -->	
+	<servlet>
+		<servlet-name>editServlet</servlet-name>
+	    <servlet-class>com.lexyone.test.webapp.notebook.servlets.EditUsersServlet</servlet-class>
+	</servlet>
+	
+    <servlet-mapping>
+        <servlet-name>editServlet</servlet-name>
+        <url-pattern>/upd_users</url-pattern>
+    </servlet-mapping>
+
+	<!-- ADD PAGE -->	
+	<servlet>
+		<servlet-name>addServlet</servlet-name>
+	    <servlet-class>com.lexyone.test.webapp.notebook.servlets.AddUsersServlet</servlet-class>
+	</servlet>
+	
+    <servlet-mapping>
+        <servlet-name>addServlet</servlet-name>
+        <url-pattern>/add_users</url-pattern>
+    </servlet-mapping>
+    
+	<!-- SAVE PAGE -->	
+	<servlet>
+		<servlet-name>saveServlet</servlet-name>
+	    <servlet-class>com.lexyone.test.webapp.notebook.servlets.SaveUsersServlet</servlet-class>
+	</servlet>
+	
+    <servlet-mapping>
+        <servlet-name>saveServlet</servlet-name>
+        <url-pattern>/save_users</url-pattern>
+    </servlet-mapping>
 	    
 </web-app>

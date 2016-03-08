@@ -7,18 +7,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class GoHomeServlet extends HttpServlet {
+public class FindUsersServlet extends HttpServlet {
 
-	private static final long serialVersionUID = 369368584921360908L;
+	private static final long serialVersionUID = 1433273474124925973L;
 
-	@Override
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-//      response.setContentType("text/html");
-//      response.setStatus(HttpServletResponse.SC_MOVED_TEMPORARILY);
-//      response.setHeader("Location", "/NoteBook/home");    
-
-		response.sendRedirect("/NoteBook/home");
-	}
-	
+    	request.getRequestDispatcher("/find_users.jsp").forward(request, response);    	
+    }
 }
