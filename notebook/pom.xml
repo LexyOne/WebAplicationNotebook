@@ -5,7 +5,7 @@
   <groupId>com.lexyone.test.webapp</groupId>
   <artifactId>notebook</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <packaging>jar</packaging>
+  <packaging>war</packaging>
 
   <name>notebook</name>
   <url>http://maven.apache.org</url>
@@ -15,11 +15,30 @@
   </properties>
 
   <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
-    </dependency>
+  	<dependency>
+  		<groupId>org.eclipse.jetty</groupId>
+  		<artifactId>jetty-server</artifactId>
+  		<version>9.2.11.v20150529</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.eclipse.jetty</groupId>
+  		<artifactId>jetty-webapp</artifactId>
+  		<version>9.2.11.v20150529</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.eclipse.jetty</groupId>
+  		<artifactId>jetty-annotations</artifactId>
+  		<version>9.2.11.v20150529</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.eclipse.jetty</groupId>
+  		<artifactId>apache-jsp</artifactId>
+  		<version>9.2.11.v20150529</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>jstl</groupId>
+  		<artifactId>jstl</artifactId>
+  		<version>1.2</version>
+  	</dependency>
   </dependencies>
 </project>

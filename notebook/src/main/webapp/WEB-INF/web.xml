@@ -1,0 +1,38 @@
+<web-app 	xmlns="http://java.sun.com/xml/ns/javaee" 
+			xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+			version="2.5">
+			
+			
+<display-name>JSP Example Application</display-name>
+			
+	<servlet-mapping>
+	    <servlet-name>default</servlet-name>
+	    <url-pattern>*.jpg</url-pattern>
+	    <url-pattern>*.png</url-pattern>
+	    <url-pattern>*.gif</url-pattern>
+	</servlet-mapping>			
+ 		
+	<!-- GO HOME PAGE -->	
+	<servlet>
+		<servlet-name>goHomeServlet</servlet-name>
+	    <servlet-class>com.lexyone.test.webapp.notebook.servlets.GoHomeServlet</servlet-class>
+	</servlet>
+
+    <servlet-mapping>
+        <servlet-name>goHomeServlet</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+	
+	<!-- HOME PAGE -->	
+	<servlet>
+		<servlet-name>homeServlet</servlet-name>
+	    <servlet-class>com.lexyone.test.webapp.notebook.servlets.HomeServlet</servlet-class>
+	</servlet>
+	
+    <servlet-mapping>
+        <servlet-name>homeServlet</servlet-name>
+        <url-pattern>/home</url-pattern>
+    </servlet-mapping>
+	    
+</web-app>
