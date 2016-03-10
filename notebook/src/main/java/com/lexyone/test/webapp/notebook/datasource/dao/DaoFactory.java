@@ -3,6 +3,9 @@ package com.lexyone.test.webapp.notebook.datasource.dao;
 public class DaoFactory {
     private static DaoFactory instance = null;
     private static UsersDao usersDao = null;
+    
+    private DaoFactory() {
+    }
 
     public static synchronized DaoFactory getInstance(){
         if(instance == null) {
@@ -13,7 +16,8 @@ public class DaoFactory {
 
     public UsersDao getUsersDao() {
         if (usersDao == null){
-        	usersDao = new UsersDaoTestImpl();
+//        	usersDao = new UsersDaoTestImpl();
+        	usersDao = new UsersDaoImpl();
         }
         return usersDao;
     }

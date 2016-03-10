@@ -10,7 +10,7 @@ public interface UsersDao {
 	void saveUser(User user);
     User getUser(Long id);
     List<User> getAllUsers();
-    List<User> getUsersByMask(User.Filter filter);
+    List<User> getUsersByMask(String filter);
     
     class DaoImpl {
         public static boolean isPersisted(User user) {

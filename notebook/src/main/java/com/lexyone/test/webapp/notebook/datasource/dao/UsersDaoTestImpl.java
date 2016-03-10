@@ -53,7 +53,8 @@ public class UsersDaoTestImpl implements UsersDao {
 		return new LinkedList<User>(users);
 	}
 
-	public List<User> getUsersByMask(User.Filter filter) {
+	public List<User> getUsersByMask(String filter) {
 		return getAllUsers(); 
 	}
+
 }
