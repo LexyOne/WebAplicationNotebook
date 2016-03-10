@@ -21,29 +21,28 @@ public class SaveUsersServlet extends HttpServlet {
     	
     	User user = new User();
     	
-    	if(request.getParameter("id") != null && !request.getParameter("id").toString().isEmpty()) {
-    		user.setId(Long.valueOf(request.getParameter("id")));
-    	}
-    	
     	user.setSurname(request.getParameter("surname"));
     	user.setName(request.getParameter("name"));
     	user.setPhone(request.getParameter("phone"));
     	user.setAge(Integer.valueOf(request.getParameter("age")));
     	user.setGender(request.getParameter("gender"));
     	
+    	if(request.getParameter("id") != null && !request.getParameter("id").toString().isEmpty()) {
+    		user.setId(Long.valueOf(request.getParameter("id")));
+    	}
+    	
     	if(!user.isCorrect()) {
            	request.setAttribute("user", user);
-
-           	request.setAttribute("error", "������ ����� ��������� �� ���������!");
-        	
+           	request.setAttribute("error", "Данные пользователя заполнены не верно.");
            	request.getRequestDispatcher("/edit_user.jsp").forward(request, response);
-        	return;
+    	} else {
+    		try {
+            	DaoFactory.getInstance().getUsersDao().saveUser(user);    	
+        		response.sendRedirect("/NoteBook/watch_users");
+			} catch (Exception e) {
+	    		request.setAttribute("errorMessage", "Нет соединеня с базой данных.");
+	        	request.getRequestDispatcher("/error.jsp").forward(request, response);
+			}
     	}
-
-    	DaoFactory.getInstance().getUsersDao().saveUser(user);    	
-
-		response.setContentType("text/html");
-		response.setStatus(HttpServletResponse.SC_MOVED_TEMPORARILY);
-		response.setHeader("Location", "/NoteBook/watch_users");
     }
 }

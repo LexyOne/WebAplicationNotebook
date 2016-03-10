@@ -18,8 +18,13 @@ public class WatchUsersServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		List<User> users = DaoFactory.getInstance().getUsersDao().getAllUsers();
-		request.setAttribute("users", users);
-		request.getRequestDispatcher("/watch_users.jsp").forward(request, response);
+		try {
+			List<User> users = DaoFactory.getInstance().getUsersDao().getAllUsers();
+			request.setAttribute("users", users);
+			request.getRequestDispatcher("/watch_users.jsp").forward(request, response);
+		} catch (Exception e) {
+    		request.setAttribute("errorMessage", "Нет соединеня с базой данных.");
+        	request.getRequestDispatcher("/error.jsp").forward(request, response);
+		}
 	}
 }
