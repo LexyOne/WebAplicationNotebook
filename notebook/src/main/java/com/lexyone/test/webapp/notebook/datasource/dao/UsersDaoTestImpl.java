@@ -18,12 +18,10 @@ public class UsersDaoTestImpl implements UsersDao {
 		return users;
 	}
 
-	@Override
 	public Long getMaxUserId() {
 		return !users.isEmpty() ? users.getLast().getId() : 0;
 	}
 
-	@Override
 	public void saveUser(User user) {
 		if(DaoImpl.isPersisted(user)) {
 			for (int i = 0; i < users.size(); i++) {
@@ -42,7 +40,6 @@ public class UsersDaoTestImpl implements UsersDao {
 		}
 	}
 
-	@Override
 	public User getUser(Long id) {
 		for (User current : users) {
 			if(DaoImpl.isEqualKey(current, id)) {
@@ -52,12 +49,10 @@ public class UsersDaoTestImpl implements UsersDao {
 		throw new IndexOutOfBoundsException();
 	}
 
-	@Override
 	public List<User> getAllUsers() {
 		return new LinkedList<User>(users);
 	}
 
-	@Override
 	public List<User> getUsersByMask(User.Filter filter) {
 		return getAllUsers(); 
 	}
