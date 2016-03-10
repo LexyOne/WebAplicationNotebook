@@ -24,9 +24,6 @@ public class UsersDaoImpl implements UsersDao {
 
  	public List<User> getUsersByMask(User.Filter filter) {
 		throw new UnsupportedOperationException();
-
- 	
- 	
  	}
 	
 }

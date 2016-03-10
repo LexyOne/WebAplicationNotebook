@@ -5,6 +5,7 @@ import java.util.List;
 import com.lexyone.test.webapp.notebook.datasource.entities.User;
 
 public interface UsersDao {
+	
 	Long getMaxUserId();
 	void saveUser(User user);
     User getUser(Long id);

@@ -56,5 +56,4 @@ public class UsersDaoTestImpl implements UsersDao {
 	public List<User> getUsersByMask(User.Filter filter) {
 		return getAllUsers(); 
 	}
-
 }

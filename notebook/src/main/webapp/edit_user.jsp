@@ -69,7 +69,7 @@
 								value="${user.surname}" 
 								style="width: 100%;" 
 								placeholder="фамилия"
-								maxlength="100" 
+								maxlength="50" 
 								required
 								autofocus
 						/>
@@ -82,7 +82,7 @@
 								value="${user.name}" 
 								style="width: 100%;" 
 								placeholder="имя"
-								maxlength="100" 
+								maxlength="50" 
 								required 
 						/>
 					</td>
