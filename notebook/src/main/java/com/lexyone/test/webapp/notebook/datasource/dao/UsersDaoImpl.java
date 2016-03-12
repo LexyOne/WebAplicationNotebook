@@ -10,6 +10,8 @@ import java.util.List;
 
 import com.lexyone.test.webapp.notebook.datasource.ConnectionPool;
 import com.lexyone.test.webapp.notebook.datasource.SqlRuntimeException;
+import com.lexyone.test.webapp.notebook.datasource.entities.Gender;
+import com.lexyone.test.webapp.notebook.datasource.entities.Phone;
 import com.lexyone.test.webapp.notebook.datasource.entities.User;
 
 public class UsersDaoImpl implements UsersDao {
@@ -65,6 +67,30 @@ public class UsersDaoImpl implements UsersDao {
 		return getUsersByMask("");
 	}
 	
+	public List<User> getUsersById(Long id) {
+		return getUsersByMask("WHERE ID = "+id);
+	}
+
+	public List<User> getUsersBySurname(String surname) {
+		return getUsersByMask("WHERE SURNAME LIKE '%"+surname+"%'");
+	}
+
+	public List<User> getUsersByName(String name) {
+		return getUsersByMask("WHERE NAME LIKE '%"+name+"%'");
+	}
+
+	public List<User> getUsersByPhone(Phone phone) {
+		return getUsersByMask("WHERE PHONE = "+phone);
+	}
+
+	public List<User> getUsersByAge(Integer age) {
+		return getUsersByMask("WHERE AGE = "+age);
+	}
+
+	public List<User> getUsersByGender(Gender gender) {
+		return getUsersByMask("WHERE GENDER = "+gender);
+	}
+	
 	public List<User> getUsersByMask(String filter) {
 		Connection conn = null;
 		try {
@@ -76,7 +102,7 @@ public class UsersDaoImpl implements UsersDao {
 			ConnectionPool.getInstance().putback(conn);
 		}
 	}
-	
+
 	
 	public Long getMaxUserIdImpl(Connection conn) throws SQLException {
 		Statement stmt = null;

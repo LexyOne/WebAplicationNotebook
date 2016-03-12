@@ -3,6 +3,8 @@ package com.lexyone.test.webapp.notebook.datasource.dao;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.lexyone.test.webapp.notebook.datasource.entities.Gender;
+import com.lexyone.test.webapp.notebook.datasource.entities.Phone;
 import com.lexyone.test.webapp.notebook.datasource.entities.User;
 
 public class UsersDaoTestImpl implements UsersDao {
@@ -53,8 +55,64 @@ public class UsersDaoTestImpl implements UsersDao {
 		return new LinkedList<User>(users);
 	}
 
-	public List<User> getUsersByMask(String filter) {
-		return getAllUsers(); 
+	public List<User> getUsersById(Long id) {
+		LinkedList<User> resultList = new LinkedList<User>();
+		for (User current : users) {
+			if(current.getId() == id) {
+				resultList.addLast(new User(current));
+			}
+		}
+		return resultList;
+	}
+
+	public List<User> getUsersBySurname(String surname) {
+		LinkedList<User> resultList = new LinkedList<User>();
+		for (User current : users) {
+			if(current.getSurname().equals(surname)) {
+				resultList.addLast(new User(current));
+			}
+		}
+		return resultList;
+	}
+
+	public List<User> getUsersByName(String name) {
+		LinkedList<User> resultList = new LinkedList<User>();
+		for (User current : users) {
+			if(current.getName().equals(name)) {
+				resultList.addLast(new User(current));
+			}
+		}
+		return resultList;
+	}
+
+	public List<User> getUsersByPhone(Phone phone) {
+		LinkedList<User> resultList = new LinkedList<User>();
+		for (User current : users) {
+			if(current.getPhone().equals(phone)) {
+				resultList.addLast(new User(current));
+			}
+		}
+		return resultList;
+	}
+
+	public List<User> getUsersByAge(Integer age) {
+		LinkedList<User> resultList = new LinkedList<User>();
+		for (User current : users) {
+			if(current.getAge() == age) {
+				resultList.addLast(new User(current));
+			}
+		}
+		return resultList;
+	}
+
+	public List<User> getUsersByGender(Gender gender) {
+		LinkedList<User> resultList = new LinkedList<User>();
+		for (User current : users) {
+			if(current.getGender() == gender) {
+				resultList.addLast(new User(current));
+			}
+		}
+		return resultList;
 	}
 
 }
