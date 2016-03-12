@@ -71,7 +71,7 @@
 			   		<td>${user.phone}</td>
 			   		<td>
 						<form action="upd_users" method="POST">
-							<input 	name="id" hidden readonly value="${user.id}"/>
+							<input 	name="id" value="${user.id}" readonly hidden />
 							<button name="update" title="Редактировать пользователя" value="true"> Изменить </button>
 						</form>
 			   		</td>

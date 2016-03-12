@@ -16,7 +16,6 @@ public class DaoFactory {
 
     public UsersDao getUsersDao() {
         if (usersDao == null){
-//        	usersDao = new UsersDaoTestImpl();
         	usersDao = new UsersDaoImpl();
         }
         return usersDao;
