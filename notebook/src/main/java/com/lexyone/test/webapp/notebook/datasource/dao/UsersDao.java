@@ -13,6 +13,8 @@ public interface UsersDao {
     List<User> getUsersByMask(String filter);
     
     class DaoImpl {
+    	private DaoImpl() {
+    	}
         public static boolean isPersisted(User user) {
     		return user.getId() != null;
         }
@@ -23,4 +25,5 @@ public interface UsersDao {
     		return isEqualKey(lhs, rhs.getId());
     	}
     }
+    
 }

@@ -14,7 +14,7 @@ public class DaoFactory {
         return instance;
     }
 
-    public UsersDao getUsersDao() {
+    public synchronized UsersDao getUsersDao() {
         if (usersDao == null){
         	usersDao = new UsersDaoImpl();
         }

@@ -15,102 +15,105 @@ import com.lexyone.test.webapp.notebook.datasource.entities.User;
 public class UsersDaoImpl implements UsersDao {
 	
 	private static final String SELECT_MAX_ID_SQL = "select MAX(ID) from USERS";
-	private static final String SELECT_ALL_SQL = "select ID, SURNAME, NAME, AGE, GENDER, PHONE from USERS ";
-	private static final String SELECT_ORDER = " order by ID";
+	private static final String SELECT_ALL_SQL = "select ID, SURNAME, NAME, AGE, GENDER, PHONE from USERS";
+	private static final String SELECT_ORDER = "order by ID";
 	private static final String SELECT_BY_ID_SQL = "select ID, SURNAME, NAME, AGE, GENDER, PHONE from USERS WHERE ID = ?";
 	private static final String UPDATE_SQL = "update USERS set SURNAME = ?, NAME = ?, AGE = ?, GENDER = ?, PHONE = ? where (ID = ?)";
 	private static final String INSERT_SQL = "insert into USERS (SURNAME, NAME, AGE, GENDER, PHONE) values (?, ?, ?, ?, ?)";
 	
 	public Long getMaxUserId() {
-		Long maxId = (long) 0;
-		
 		Connection conn = null;
-		Statement stmt = null;
-		ResultSet rs = null;
 		try {
 			conn = ConnectionPool.getInstance().retrieve();
-			stmt = conn.createStatement();
-			rs = stmt.executeQuery(SELECT_MAX_ID_SQL);
-			while(rs.next()){
-				maxId = rs.getLong("MAX");
-			}
+			return getMaxUserIdImpl(conn);
 		} catch (SQLException e) {
 			throw new SqlRuntimeException();
 		} finally {
-			try {
-				if(rs != null) rs.close();
-				if(stmt != null) stmt.close();
-			} catch (SQLException e) {
-				throw new SqlRuntimeException();
-			}
-			if(conn != null) ConnectionPool.getInstance().putback(conn);
-		}
-
-		if(maxId == 0) throw new SqlRuntimeException();
-		return maxId;
-	}
-
-	public void saveUser(User user) {
-		if(DaoImpl.isPersisted(user)) {
-			updateUser(user);
-		} else {
-			addUser(user);
+			ConnectionPool.getInstance().putback(conn);
 		}
 	}
 	
-	private void addUser(User user) {
+	public void saveUser(User user) {
 		Connection conn = null;
-		PreparedStatement ps = null;
-		int res = 0;
 		try {
 			conn = ConnectionPool.getInstance().retrieve();
-			ps = conn.prepareStatement(INSERT_SQL);
-			
-			setUser(ps, user);
-			
-			res = ps.executeUpdate();
-			
+			if(!DaoImpl.isPersisted(user)) {
+				addUserImpl(conn, user);
+			} else {
+				updateUserImpl(conn, user);
+			}
 		} catch (SQLException e) {
 			throw new SqlRuntimeException();
 		} finally {
-			try {
-				if(ps != null) ps.close();
-			} catch (SQLException e) {
-				throw new SqlRuntimeException();
-			}
-			if(conn != null) ConnectionPool.getInstance().putback(conn);
+			ConnectionPool.getInstance().putback(conn);
 		}
-		
-		if(res == 0) throw new SqlRuntimeException();
-		
-		user.setId(getMaxUserId());
+	}
+	
+	public User getUser(Long id) {
+		Connection conn = null;
+		try {
+			conn = ConnectionPool.getInstance().retrieve();
+			return getUserImpl(conn, id);
+		} catch (SQLException e) {
+			throw new SqlRuntimeException();
+		} finally {
+			ConnectionPool.getInstance().putback(conn);
+		}
+	}
+	
+	public List<User> getAllUsers() {
+		return getUsersByMask("");
+	}
+	
+	public List<User> getUsersByMask(String filter) {
+		Connection conn = null;
+		try {
+			conn = ConnectionPool.getInstance().retrieve();
+			return getUsersByMaskImpl(conn, filter);
+		} catch (SQLException e) {
+			throw new SqlRuntimeException();
+		} finally {
+			ConnectionPool.getInstance().putback(conn);
+		}
+	}
+	
+	
+	public Long getMaxUserIdImpl(Connection conn) throws SQLException {
+		Statement stmt = null;
+		ResultSet rs = null;
+		try {
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(SELECT_MAX_ID_SQL);
+			if(!rs.next()) throw new SqlRuntimeException();
+			return rs.getLong("MAX");
+		} finally {
+			if(rs != null) rs.close();
+			if(stmt != null) stmt.close();
+		}
 	}
 
-	private void updateUser(User user) {
-		Connection conn = null;
+	private void addUserImpl(Connection conn, User user) throws SQLException {
 		PreparedStatement ps = null;
-		int res = 0;
 		try {
-			conn = ConnectionPool.getInstance().retrieve();
+			ps = conn.prepareStatement(INSERT_SQL);
+			setUser(ps, user);
+			if(0 == ps.executeUpdate()) throw new SqlRuntimeException();
+			user.setId(getMaxUserId());
+		} finally {
+			if(ps != null) ps.close();
+		}
+	}
+
+	private void updateUserImpl(Connection conn, User user) throws SQLException {
+		PreparedStatement ps = null;
+		try {
 			ps = conn.prepareStatement(UPDATE_SQL);
-			
 			setUser(ps, user);
 			ps.setLong(6, user.getId());
-			
-			res = ps.executeUpdate();
-			
-		} catch (SQLException e) {
-			throw new SqlRuntimeException();
+			if(0 == ps.executeUpdate()) throw new SqlRuntimeException();
 		} finally {
-			try {
-				if(ps != null) ps.close();
-			} catch (SQLException e) {
-				throw new SqlRuntimeException();
-			}
-			if(conn != null) ConnectionPool.getInstance().putback(conn);
+			if(ps != null) ps.close();
 		}
-		
-		if(res == 0) throw new SqlRuntimeException();
 	}
 	
 	private void setUser(PreparedStatement ps, User user) throws SQLException {
@@ -121,77 +124,46 @@ public class UsersDaoImpl implements UsersDao {
 		ps.setString(5, user.getPhone().toString());
 	}
 	
-	public User getUser(Long id) {
-		LinkedList<User> users = new LinkedList<User>();
-
-		Connection conn = null;
+	public User getUserImpl(Connection conn, Long id) throws SQLException {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			conn = ConnectionPool.getInstance().retrieve();
 			ps = conn.prepareStatement(SELECT_BY_ID_SQL);
 			ps.setLong(1, id);
 			rs = ps.executeQuery();
-			while(rs.next()){
-				users.add(loadUser(rs));
-			}
-		} catch (SQLException e) {
-			throw new SqlRuntimeException();
+			if(!rs.next()) throw new SqlRuntimeException();
+			return loadUser(rs);
 		} finally {
-			try {
-				if(rs != null) rs.close();
-				if(ps != null) ps.close();
-			} catch (SQLException e) {
-				throw new SqlRuntimeException();
-			}
-			if(conn != null) ConnectionPool.getInstance().putback(conn);
+			if(rs != null) rs.close();
+			if(ps != null) ps.close();
 		}
-		
-		return !users.isEmpty() ? users.getFirst() : new User(); 
 	}
 
-	public List<User> getAllUsers() {
-		return getUsersByMask("");
-	}
-	
-	public List<User> getUsersByMask(String filter) {
-		LinkedList<User> users = new LinkedList<User>();
-		
-		Connection conn = null;
+	public List<User> getUsersByMaskImpl(Connection conn, String filter) throws SQLException {
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
-			conn = ConnectionPool.getInstance().retrieve();
 			stmt = conn.createStatement();
-			rs = stmt.executeQuery(SELECT_ALL_SQL+filter+SELECT_ORDER);
+			rs = stmt.executeQuery(SELECT_ALL_SQL+" "+filter+" "+SELECT_ORDER);
+			LinkedList<User> users = new LinkedList<User>();
 			while(rs.next()){
 				users.add(loadUser(rs));
 			}
-		} catch (SQLException e) {
-			throw new SqlRuntimeException();
+			return users;
 		} finally {
-			try {
-				if(rs != null) rs.close();
-				if(stmt != null) stmt.close();
-			} catch (SQLException e) {
-				throw new SqlRuntimeException();
-			}
-			if(conn != null) ConnectionPool.getInstance().putback(conn);
+			if(rs != null) rs.close();
+			if(stmt != null) stmt.close();
 		}
-		
-		return users;
 	}
 	
 	private User loadUser(ResultSet rs) throws SQLException {
 		User user = new User();
-
 		user.setId(rs.getLong("ID"));
 		user.setSurname(rs.getString("SURNAME"));
 		user.setName(rs.getString("NAME"));
 		user.setAge(rs.getInt("AGE"));
 		user.setGender(rs.getString("GENDER"));
 		user.setPhone(rs.getString("PHONE"));
-
 		return user;
 	}
 

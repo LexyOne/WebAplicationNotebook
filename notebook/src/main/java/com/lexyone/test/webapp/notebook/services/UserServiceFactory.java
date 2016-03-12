@@ -6,7 +6,7 @@ public class UserServiceFactory {
     private UserServiceFactory() {
     }
 
-    public static UserService getUserService(){
+    public static UserService getNewUserService(){
         return new UserServiceImpl(DaoFactory.getInstance().getUsersDao());
     }
 }
