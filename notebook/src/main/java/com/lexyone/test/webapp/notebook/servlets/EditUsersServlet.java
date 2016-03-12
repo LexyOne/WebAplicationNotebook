@@ -7,36 +7,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.lexyone.test.webapp.notebook.datasource.dao.DaoFactory;
 import com.lexyone.test.webapp.notebook.datasource.entities.User;
+import com.lexyone.test.webapp.notebook.services.UserServiceFactory;
+
+import static com.lexyone.test.webapp.notebook.servlets.RequestDispatcher.*;
 
 public class EditUsersServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 4200799529231065138L;
-
-    private void doWork(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	try {
-        	if(request.getParameter("update") != null && request.getParameter("id") != null) {
-        		Long id = Long.valueOf(request.getParameter("id"));
-        		User user = DaoFactory.getInstance().getUsersDao().getUser(id);
-        		if(user.getId() == id) {
-            		request.setAttribute("user", user);
-            		request.setAttribute("mode", "update");
-                	request.getRequestDispatcher("/edit_user.jsp").forward(request, response);
-        		} else {
-            		request.setAttribute("errorMessage", "Пользователь с номером "+id+" не найден.");
-                	request.getRequestDispatcher("/error.jsp").forward(request, response);
-    			}
-        	} else {
-           		response.setContentType("text/html");
-             	response.setStatus(HttpServletResponse.SC_MOVED_TEMPORARILY);
-              	response.setHeader("Location", "/NoteBook/watch_users");
-        	}
-		} catch (Exception e) {
-    		request.setAttribute("errorMessage", "Нет соединеня с базой данных.");
-        	request.getRequestDispatcher("/error.jsp").forward(request, response);
-		}
-    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -47,4 +25,29 @@ public class EditUsersServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	doWork(request, response);
     }
+    
+    private void doWork(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	if(isUpdateRequest(request) && hasUserId(request)) {
+    		Long id = Long.valueOf(request.getParameter("id"));
+    		try {
+        		User user = UserServiceFactory.getNewUserService().load(id);
+           		request.setAttribute("user", user);
+           		request.setAttribute("mode", "update");
+               	forward("/edit_user.jsp", request, response);
+			} catch (Exception e) {
+    			showError("Пользователь с номером "+id+" не найден!", request, response);
+			}
+    	} else {
+    		redirect("/NoteBook/watch_users", response);
+    	}
+    }
+    
+    private boolean isUpdateRequest(HttpServletRequest request) {
+    	return (request.getParameter("update") != null); 
+    }
+
+    private boolean hasUserId(HttpServletRequest request) {
+    	return (request.getParameter("id") != null); 
+    }
+
 }

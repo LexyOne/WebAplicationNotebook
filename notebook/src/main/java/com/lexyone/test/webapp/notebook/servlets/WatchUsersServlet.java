@@ -8,8 +8,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.lexyone.test.webapp.notebook.datasource.dao.DaoFactory;
 import com.lexyone.test.webapp.notebook.datasource.entities.User;
+import com.lexyone.test.webapp.notebook.services.UserServiceFactory;
+
+import static com.lexyone.test.webapp.notebook.servlets.RequestDispatcher.*; 
 
 public class WatchUsersServlet extends HttpServlet {
 
@@ -19,12 +21,12 @@ public class WatchUsersServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		try {
-			List<User> users = DaoFactory.getInstance().getUsersDao().getAllUsers();
+			List<User> users = UserServiceFactory.getNewUserService().getAll();
 			request.setAttribute("users", users);
-			request.getRequestDispatcher("/watch_users.jsp").forward(request, response);
+			forward("/watch_users.jsp", request, response);
 		} catch (Exception e) {
-    		request.setAttribute("errorMessage", "Нет соединеня с базой данных.");
-        	request.getRequestDispatcher("/error.jsp").forward(request, response);
+			showError("Ошибка соединеня с базой данных.", request, response);
 		}
 	}
+    
 }
