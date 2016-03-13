@@ -11,45 +11,32 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.lexyone.test.webapp.notebook.datasource.entities.User;
+import com.lexyone.test.webapp.notebook.datasource.entities.Gender;
+import com.lexyone.test.webapp.notebook.datasource.entities.Phone;
 import com.lexyone.test.webapp.notebook.services.UserServiceFactory;
 
 public class FindUsersServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1433273474124925973L;
-	
-	enum FindMode { UNKNOWN, BY_ID, BY_SURNAME, BY_NAME, BY_PHONE, BY_AGE, BY_GENDER };
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	if(isFindMode(request)) {
     		try {
-        		User userMask = loadUser(request);
-        		
-        		switch(getFindMode(request)) {
-        		case BY_ID:
-        			showUsers(UserServiceFactory.getNewUserService().findById(userMask.getId()), request, response);
-        			return;
-        		case BY_SURNAME:
-        			showUsers(UserServiceFactory.getNewUserService().findBySurname(userMask.getSurname()), request, response);
-        			return;
-        		case BY_NAME:
-        			showUsers(UserServiceFactory.getNewUserService().findByName(userMask.getName()), request, response);
-        			return;
-        		case BY_PHONE:
-        			showUsers(UserServiceFactory.getNewUserService().findByPhone(userMask.getPhone()), request, response);
-        			return;
-        		case BY_AGE:
-        			showUsers(UserServiceFactory.getNewUserService().findByAge(userMask.getAge()), request, response);
-        			return;
-        		case BY_GENDER:
-        			showUsers(UserServiceFactory.getNewUserService().findByGender(userMask.getGender()), request, response);
-        			return;
-    			default:
-    	       		request.setAttribute("error", "SASAS");
-    	           	forward("/find_users.jsp", request, response);
-    	           	return;
-        		}
+    			if(	checkFindById(request, response) ||
+    				checkFindBySurname(request, response) ||
+    				checkFindByName(request, response) ||
+    				checkFindByPhone(request, response) ||
+    				checkFindByAge(request, response) ||
+    				checkFindByGender(request, response)
+    					) {
+    				return;
+    			} else {
+    				throw new IllegalArgumentException();
+    			}
+			} catch (IllegalArgumentException e) {
+	       		request.setAttribute("error", "Параметры запроса указаны неверно. Повторите попытку.");
+	           	forward("/find_users.jsp", request, response);
 			} catch (Exception e) {
 				showError("Ошибка соединеня с базой данных.", request, response);
 			}
@@ -62,28 +49,63 @@ public class FindUsersServlet extends HttpServlet {
     	return (request.getParameter("findBy") != null);
     }
     
-    private FindMode getFindMode(HttpServletRequest request) {
+    private boolean checkFindById(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	String findMode = request.getParameter("findBy");
-    	if(findMode.equals("BY_ID")) return FindMode.BY_ID;
-    	if(findMode.equals("BY_SURNAME")) return FindMode.BY_SURNAME;
-    	if(findMode.equals("BY_NAME")) return FindMode.BY_NAME;
-    	if(findMode.equals("BY_PHONE")) return FindMode.BY_PHONE;
-    	if(findMode.equals("BY_AGE")) return FindMode.BY_AGE;
-    	if(findMode.equals("BY_GENDER")) return FindMode.BY_GENDER;
-    	return FindMode.UNKNOWN;
+    	if(!findMode.equals("BY_ID")) return false;
+    	Long id = loadAsLong("id", request);
+   		if(id == null) throw new IllegalArgumentException();
+		request.setAttribute("message", "Результаты поиска.");
+		showUsers(UserServiceFactory.getNewUserService().findById(id), request, response);
+		return true;
     }
-
-    private User loadUser(HttpServletRequest request) {
-    	User user = new User();
-
-    	user.setId(loadAsLong("id", request));
-    	user.setSurname(request.getParameter("surname"));
-    	user.setName(request.getParameter("name"));
-    	user.setPhone(request.getParameter("phone"));
-    	user.setAge(loadAsInteger("age", request));
-    	user.setGender(request.getParameter("gender"));
-    	
-    	return user;
+    
+    private boolean checkFindBySurname(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	String findMode = request.getParameter("findBy");
+    	if(!findMode.equals("BY_SURNAME")) return false;
+    	String surname = request.getParameter("surname");
+   		if(surname.trim().isEmpty()) throw new IllegalArgumentException();
+		request.setAttribute("message", "Результаты поиска.");
+		showUsers(UserServiceFactory.getNewUserService().findBySurname(surname), request, response);
+		return true;
+    }
+    
+    private boolean checkFindByName(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	String findMode = request.getParameter("findBy");
+    	if(!findMode.equals("BY_NAME")) return false;
+    	String name = request.getParameter("name");
+   		if(name.trim().isEmpty()) throw new IllegalArgumentException();
+		request.setAttribute("message", "Результаты поиска.");
+		showUsers(UserServiceFactory.getNewUserService().findByName(name), request, response);
+		return true;
+    }
+    
+    private boolean checkFindByPhone(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	String findMode = request.getParameter("findBy");
+    	if(!findMode.equals("BY_PHONE")) return false;
+    	Phone phone = Phone.valueOf(request.getParameter("phone"));
+    	if(!phone.isCorrect()) throw new IllegalArgumentException();
+		request.setAttribute("message", "Результаты поиска.");
+		showUsers(UserServiceFactory.getNewUserService().findByPhone(phone), request, response);
+		return true;
+    }
+    
+    private boolean checkFindByAge(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	String findMode = request.getParameter("findBy");
+    	if(!findMode.equals("BY_AGE")) return false;
+    	Integer age = loadAsInteger("age", request);
+   		if(age == null) throw new IllegalArgumentException();
+		request.setAttribute("message", "Результаты поиска.");
+		showUsers(UserServiceFactory.getNewUserService().findByAge(age), request, response);
+		return true;
+    }
+    
+    private boolean checkFindByGender(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	String findMode = request.getParameter("findBy");
+    	if(!findMode.equals("BY_GENDER")) return false;
+    	Gender gender = Gender.identify(request.getParameter("gender")); 
+		request.setAttribute("message", "Результаты поиска.");
+		showUsers(UserServiceFactory.getNewUserService().findByGender(gender), request, response);
+		return true;
     }
     
     private Long loadAsLong(String param, HttpServletRequest request) {

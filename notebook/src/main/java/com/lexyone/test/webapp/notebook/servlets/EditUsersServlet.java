@@ -38,7 +38,8 @@ public class EditUsersServlet extends HttpServlet {
     			showError("Пользователь с номером "+id+" не найден!", request, response);
 			}
     	} else {
-    		redirect("/NoteBook/watch_users", response);
+    		request.setAttribute("message", "Выберите пользователя для редактирования.");
+    		forward("/watch_users", request, response);
     	}
     }
     

@@ -19,6 +19,14 @@
 
 	<%@ include file="/header.jsp" %>
 	
+    <c:if test="${message == null}">
+		<c:set var="hiddenIfNoMessage">hidden</c:set>
+    </c:if>
+    
+    <h3> <p ${hiddenIfNoMessage} align="center">
+    <font color="blue"> <br/> ${message} </font> 
+    </p> </h3>
+
 	<table align="center">
 		<caption><h2>Таблица пользователей</h2></caption>
 		
