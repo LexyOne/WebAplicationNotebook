@@ -35,28 +35,23 @@ public class UserServiceImpl implements UserService {
 	}
 
 	public List<User> findBySurname(String surname) {
-		// TODO Auto-generated method stub
-		return null;
+		return usersDao.getUsersBySurname(surname);
 	}
 
 	public List<User> findByName(String name) {
-		// TODO Auto-generated method stub
-		return null;
+		return  usersDao.getUsersByName(name);
 	}
 
 	public List<User> findByPhone(Phone phone) {
-		// TODO Auto-generated method stub
-		return null;
+		return usersDao.getUsersByPhone(phone);
 	}
 
 	public List<User> findByAge(Integer age) {
-		// TODO Auto-generated method stub
-		return null;
+		return usersDao.getUsersByAge(age);
 	}
 
 	public List<User> findByGender(Gender gender) {
-		// TODO Auto-generated method stub
-		return null;
+		return usersDao.getUsersByGender(gender);
 	}
 
 }

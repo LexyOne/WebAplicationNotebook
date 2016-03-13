@@ -72,15 +72,15 @@ public class UsersDaoImpl implements UsersDao {
 	}
 
 	public List<User> getUsersBySurname(String surname) {
-		return getUsersByMask("WHERE SURNAME LIKE '%"+surname+"%'");
+		return getUsersByMask("WHERE LOWER(SURNAME) LIKE '%"+surname.toLowerCase()+"%'");
 	}
 
 	public List<User> getUsersByName(String name) {
-		return getUsersByMask("WHERE NAME LIKE '%"+name+"%'");
+		return getUsersByMask("WHERE LOWER(NAME) LIKE '%"+name.toLowerCase()+"%'");
 	}
 
 	public List<User> getUsersByPhone(Phone phone) {
-		return getUsersByMask("WHERE PHONE = "+phone);
+		return getUsersByMask("WHERE PHONE = '"+phone+"'");
 	}
 
 	public List<User> getUsersByAge(Integer age) {
@@ -88,7 +88,7 @@ public class UsersDaoImpl implements UsersDao {
 	}
 
 	public List<User> getUsersByGender(Gender gender) {
-		return getUsersByMask("WHERE GENDER = "+gender);
+		return getUsersByMask("WHERE GENDER = '"+gender.getId()+"'");
 	}
 	
 	public List<User> getUsersByMask(String filter) {

@@ -19,12 +19,20 @@
 <body>
 	<%@ include file="/header.jsp" %>
 
-	<form action="/NoteBook/watch_users" method="GET" autocomplete="off">
+	<form action="" method="GET" autocomplete="off">
 		<input 	name="mode"
 				value="${mode}"
 				hidden 
 				/>
 
+	    <c:if test="${error == null}">
+			<c:set var="hiddenIfNotError">hidden</c:set>
+	    </c:if>
+	    
+	    <h3> <p ${hiddenIfNotError} align="center">
+	    <font color="red"> <br/> Ошибка: ${error} </font> 
+	    </p> </h3>
+    
 		<table  align="center">
 
 			<caption><h2>Поиск пользователя</h2></caption>
@@ -35,7 +43,7 @@
 
 		  	<tbody bgcolor="#e8e8e8">
 				<tr>
-					<td><input type="radio" name="findBy" value="ID" required></td>
+					<td><input type="radio" name="findBy" value="BY_ID" required></td>
 					<td>Уникальный номер:</td>
 					<td>
 						<input 	name="id"
@@ -46,7 +54,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td><input type="radio" name="findBy" value="SURNAME" required></td>
+					<td><input type="radio" name="findBy" value="BY_SURNAME" required></td>
 					<td>Фамилия:</td>
 					<td>
 						<input 	name="surname" 
@@ -58,7 +66,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td><input type="radio" name="findBy" value="NAME" required></td>
+					<td><input type="radio" name="findBy" value="BY_NAME" required></td>
 					<td>Имя:</td>
 					<td>
 						<input 	name="name" 
@@ -70,7 +78,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td><input type="radio" name="findBy" value="PHONE" required></td>
+					<td><input type="radio" name="findBy" value="BY_PHONE" required></td>
 					<td>Телефон:</td>
 					<td>
 						<input 	name="phone" 
@@ -83,7 +91,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td><input type="radio" name="findBy" value="AGE" required></td>
+					<td><input type="radio" name="findBy" value="BY_AGE" required></td>
 					<td>Возраст:</td>
 					<td>
 						<select	name="age"
@@ -111,7 +119,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td><input type="radio" name="findBy" value="GENDER" required></td>
+					<td><input type="radio" name="findBy" value="BY_GENDER" required></td>
 					<td>Пол:</td>
 					<td>
 						<select	name="gender"
