@@ -1,7 +1,7 @@
 <%@ page 	language="java" 
 			contentType="text/html; charset=UTF-8"
     		pageEncoding='UTF-8'
-    		errorPage="error.jsp"
+    		errorPage="/error.jsp"
     		%>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -45,12 +45,6 @@
 						onclick="location.href='find_users';"
 						>  Найти   </button>
  	</p>
-
-<%-- 
-	<p align="center">
-		<button title="go to exampe page" onclick="location.href='example';"> go to exampe page </button>
-	</p>
---%>
 	
 </body>
 

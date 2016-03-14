@@ -13,6 +13,12 @@ public class User {
 	public static final int MIN_AGE = 0; 
 	public static final int MAX_AGE = 100; 
 
+	public static final int MIN_SURNAME_LENGTH = 5; 
+	public static final int MAX_SURNAME_LENGTH = 50; 
+
+	public static final int MIN_NAME_LENGTH = 5; 
+	public static final int MAX_NAME_LENGTH = 50; 
+
 	public User() {
 	}
 

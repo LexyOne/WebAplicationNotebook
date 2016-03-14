@@ -1,7 +1,7 @@
 <%@ page 	language="java" 
 			contentType="text/html; charset=UTF-8"
     		pageEncoding='UTF-8'
-    		errorPage="error.jsp"
+    		errorPage="/error.jsp"
     		%>
     		
     		
@@ -27,8 +27,23 @@
     <font color="blue"> <br/> ${message} </font> 
     </p> </h3>
 
-	<table align="center">
-		<caption><h2>Таблица пользователей</h2></caption>
+    <c:if test="${(mode == 'find') && users.isEmpty()}">
+		<c:set var="hiddenIfFindModeAndNothingFound">hidden</c:set>
+	    <h2> <p align="center">
+	    По вашему запросу ничего не найдено. 
+	    </p> </h2>
+    </c:if>
+    
+	<table align="center" ${hiddenIfFindModeAndNothingFound}>
+	
+		<c:choose>
+		    <c:when test="${mode == 'find'}">
+				<caption><h2>Результаты поиска</h2></caption>
+		    </c:when>
+		    <c:otherwise>
+				<caption><h2>Таблица пользователей</h2></caption>
+		    </c:otherwise>
+		</c:choose>
 		
 		<col width="80" span="1">
 		<col width="200" span="2">

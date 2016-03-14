@@ -1,6 +1,5 @@
 package com.lexyone.test.webapp.notebook.services;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import com.lexyone.test.webapp.notebook.datasource.dao.UsersDao;
@@ -29,9 +28,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	public List<User> findById(Long id) {
-		LinkedList<User> users = new LinkedList<User>();
-		users.add(usersDao.getUser(id));
-		return users;
+		return usersDao.getUsersById(id);
 	}
 
 	public List<User> findBySurname(String surname) {
