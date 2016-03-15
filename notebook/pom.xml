@@ -40,5 +40,10 @@
   		<artifactId>jstl</artifactId>
   		<version>1.2</version>
   	</dependency>
+  	<dependency>
+  		<groupId>org.firebirdsql.jdbc</groupId>
+  		<artifactId>jaybird-jdk18</artifactId>
+  		<version>2.2.9</version>
+  	</dependency>
   </dependencies>
 </project>

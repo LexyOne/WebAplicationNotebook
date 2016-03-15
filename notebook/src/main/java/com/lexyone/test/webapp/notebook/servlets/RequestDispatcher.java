@@ -13,7 +13,7 @@ public class RequestDispatcher {
 
     public static void showUsers(List<User> users, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setAttribute("users", users);
-		forward("/watch_users.jsp", request, response);
+		forward("/watch_users_yui.jsp", request, response);
     }
     
     public static void showError(String error, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
