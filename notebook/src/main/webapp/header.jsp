@@ -25,31 +25,31 @@
 	<div align="center">
 	
 		<button 		name="home" 
-						style="width:100px" 
+						style="width:110px" 
 						title="Главная страница" 
 						onclick="location.href='home';"
 						> Главная  </button>
 						
 		<button 		name="view" 
-						style="width:100px" 
+						style="width:110px" 
 						title="Просмотр пользователей" 
 						onclick="location.href='watch_users';"
 						> Просмотр </button>
 						
 		<button 		name="add" 
-						style="width:100px" 
+						style="width:110px" 
 						title="Добавление пользователей" 
 						onclick="location.href='add_users';"
 						> Добавить </button>
 						
 		<button 		name="edit" 
-						style="width:100px" 
+						style="width:110px" 
 						title="Редактирование пользователя" 
 						onclick="location.href='upd_users';"
-						> Изменить </button>
+						> Редактировать </button>
 						
 		<button 		name="find" 
-						style="width:100px" 
+						style="width:110px" 
 						title="Поиск пользователей" 
 						onclick="location.href='find_users';"
 						>  Найти   </button>
