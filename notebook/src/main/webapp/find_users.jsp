@@ -24,109 +24,114 @@
 		<c:set var="hiddenIfNotError">hidden</c:set>
     </c:if>
     
-    <h3> <p ${hiddenIfNotError} align="center">
-    <font color="red"> <br/> Ошибка: ${error} </font> 
-    </p> </h3>
+    <div align="center" ${hiddenIfNotError}>
+		<br/><br/>
+		<font face="Times New Roman" size="5" color="red">${error}</font><br/>
+		<br/><br/>
+    </div>
+
+    <div align="center">
+		<form name="find_form" action="" method="GET" onsubmit="return validate_find();" autocomplete="off">
+	
+			<table>
+	
+				<caption><h2>Поиск пользователя</h2></caption>
+				
+				<col span="1">
+				<col width="150" span="1">
+				<col width="300" span="1">
+	
+			  	<tbody bgcolor="#e8e8e8">
+			  	
+					<tr>
+						<td><input type="radio" name="findBy" value="BY_ID" required onchange="findByChanged(this.value)"></td>
+						<td>Уникальный номер:</td>
+						<td>
+							<input 	name="id"
+									placeholder="Уникальный номер"
+									maxlength="10" 
+									style="width: 100%;" 
+							/>
+						</td>
+					</tr>
+					
+					<tr>
+						<td><input type="radio" name="findBy" value="BY_SURNAME" required onchange="findByChanged(this.value)"></td>
+						<td>Фамилия:</td>
+						<td>
+							<input 	name="surname" 
+									placeholder="Фамилия"
+									maxlength="<%= User.MAX_SURNAME_LENGTH %>" 
+									style="width: 100%;" 
+							/>
+						</td>
+					</tr>
+					
+					<tr>
+						<td><input type="radio" name="findBy" value="BY_NAME" required onchange="findByChanged(this.value)"></td>
+						<td>Имя:</td>
+						<td>
+							<input 	name="name" 
+									placeholder="Имя"
+									maxlength="<%= User.MAX_NAME_LENGTH %>" 
+									style="width: 100%;" 
+							/>
+						</td>
+					</tr>
+					
+					<tr>
+						<td><input type="radio" name="findBy" value="BY_PHONE" required onchange="findByChanged(this.value)"></td>
+						<td>Телефон:</td>
+						<td>
+							<input 	name="phone" 
+									placeholder="<%= Phone.getHintPattern() %>"
+									<%--
+										pattern="<%= Phone.getRegexPattern() %>"
+									--%>
+									style="width: 100%;" 
+							/>
+						</td>
+					</tr>
+					
+					<tr>
+						<td><input type="radio" name="findBy" value="BY_AGE" required onchange="findByChanged(this.value)"></td>
+						<td>Возраст:</td>
+						<td>
+							<select	name="age"
+									style="width: 100%;" 
+									>
+								<option selected disabled value=""></option>
+								<c:forEach var="ageValue" begin="<%= User.MIN_AGE %>" end="<%= User.MAX_AGE %>">
+									<option value="${ageValue}">${ageValue}</option>
+								</c:forEach>
+							</select>
+						</td>
+					</tr>
+					
+					<tr>
+						<td><input type="radio" name="findBy" value="BY_GENDER" required onchange="findByChanged(this.value)"></td>
+						<td>Пол:</td>
+						<td>
+							<select	name="gender"
+									style="width: 100%;" 
+									>
+								<option disabled selected></option>
+								<option value="M"> Мужской </option>
+								<option value="W"> Женский </option>
+							</select>
+						</td>
+					</tr>
+	
+			  	</tbody>
+	
+			</table>
+	
+			<p align="center">
+				<button name="find" value="true" style="width:120px" title="Найти пользователя"> Найти </button>
+			</p>
+		</form>	
+    </div>
     
-	<form name="find_form" action="" method="GET" onsubmit="return validate_find();" autocomplete="off">
-
-		<table  align="center">
-
-			<caption><h2>Поиск пользователя</h2></caption>
-			
-			<col span="1">
-			<col width="150" span="1">
-			<col width="300" span="1">
-
-		  	<tbody bgcolor="#e8e8e8">
-		  	
-				<tr>
-					<td><input type="radio" name="findBy" value="BY_ID" required onchange="findByChanged(this.value)"></td>
-					<td>Уникальный номер:</td>
-					<td>
-						<input 	name="id"
-								placeholder="Уникальный номер"
-								maxlength="10" 
-								style="width: 100%;" 
-						/>
-					</td>
-				</tr>
-				
-				<tr>
-					<td><input type="radio" name="findBy" value="BY_SURNAME" required onchange="findByChanged(this.value)"></td>
-					<td>Фамилия:</td>
-					<td>
-						<input 	name="surname" 
-								placeholder="Фамилия"
-								maxlength="<%= User.MAX_SURNAME_LENGTH %>" 
-								style="width: 100%;" 
-						/>
-					</td>
-				</tr>
-				
-				<tr>
-					<td><input type="radio" name="findBy" value="BY_NAME" required onchange="findByChanged(this.value)"></td>
-					<td>Имя:</td>
-					<td>
-						<input 	name="name" 
-								placeholder="Имя"
-								maxlength="<%= User.MAX_NAME_LENGTH %>" 
-								style="width: 100%;" 
-						/>
-					</td>
-				</tr>
-				
-				<tr>
-					<td><input type="radio" name="findBy" value="BY_PHONE" required onchange="findByChanged(this.value)"></td>
-					<td>Телефон:</td>
-					<td>
-						<input 	name="phone" 
-								placeholder="<%= Phone.getHintPattern() %>"
-								<%--
-									pattern="<%= Phone.getRegexPattern() %>"
-								--%>
-								style="width: 100%;" 
-						/>
-					</td>
-				</tr>
-				
-				<tr>
-					<td><input type="radio" name="findBy" value="BY_AGE" required onchange="findByChanged(this.value)"></td>
-					<td>Возраст:</td>
-					<td>
-						<select	name="age"
-								style="width: 100%;" 
-								>
-							<option selected disabled value=""></option>
-							<c:forEach var="ageValue" begin="<%= User.MIN_AGE %>" end="<%= User.MAX_AGE %>">
-								<option value="${ageValue}">${ageValue}</option>
-							</c:forEach>
-						</select>
-					</td>
-				</tr>
-				
-				<tr>
-					<td><input type="radio" name="findBy" value="BY_GENDER" required onchange="findByChanged(this.value)"></td>
-					<td>Пол:</td>
-					<td>
-						<select	name="gender"
-								style="width: 100%;" 
-								>
-							<option disabled selected></option>
-							<option value="M"> Мужской </option>
-							<option value="W"> Женский </option>
-						</select>
-					</td>
-				</tr>
-
-		  	</tbody>
-
-		</table>
-
-		<p align="center">
-			<button name="find" value="true" style="width:120px" title="Найти пользователя"> Найти </button>
-		</p>
-	</form>	
 
 </body>
 

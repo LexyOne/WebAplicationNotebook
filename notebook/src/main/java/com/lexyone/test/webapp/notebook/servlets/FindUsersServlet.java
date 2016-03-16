@@ -53,9 +53,8 @@ public class FindUsersServlet extends HttpServlet {
     	if(!findMode.equals("BY_ID")) return false;
     	Long id = loadAsLong("id", request);
    		if(id == null) throw new IllegalArgumentException();
-   		request.setAttribute("mode", "find");
-		request.setAttribute("message", "Результаты поиска для 'Номер' = '"+id+"'.");
-		showUsers(UserServiceFactory.getNewUserService().findById(id), request, response);
+		request.setAttribute("findMode", "'Номер' = '"+id+"'.");
+		showUsers(UserServiceFactory.getNewUserService().findById(id), "find", request, response);
 		return true;
     }
     
@@ -64,9 +63,8 @@ public class FindUsersServlet extends HttpServlet {
     	if(!findMode.equals("BY_SURNAME")) return false;
     	String surname = request.getParameter("surname");
    		if(surname.trim().isEmpty()) throw new IllegalArgumentException();
-   		request.setAttribute("mode", "find");
-   		request.setAttribute("message", "Результаты поиска для 'Фамилия' = '"+surname+"'.");
-		showUsers(UserServiceFactory.getNewUserService().findBySurname(surname), request, response);
+   		request.setAttribute("findMode", "'Фамилия' = '"+surname+"'.");
+		showUsers(UserServiceFactory.getNewUserService().findBySurname(surname), "find", request, response);
 		return true;
     }
     
@@ -75,9 +73,8 @@ public class FindUsersServlet extends HttpServlet {
     	if(!findMode.equals("BY_NAME")) return false;
     	String name = request.getParameter("name");
    		if(name.trim().isEmpty()) throw new IllegalArgumentException();
-   		request.setAttribute("mode", "find");
-   		request.setAttribute("message", "Результаты поиска для 'Имя' = '"+name+"'.");
-		showUsers(UserServiceFactory.getNewUserService().findByName(name), request, response);
+   		request.setAttribute("findMode", "'Имя' = '"+name+"'.");
+		showUsers(UserServiceFactory.getNewUserService().findByName(name), "find", request, response);
 		return true;
     }
     
@@ -86,9 +83,8 @@ public class FindUsersServlet extends HttpServlet {
     	if(!findMode.equals("BY_PHONE")) return false;
     	Phone phone = Phone.valueOf(request.getParameter("phone"));
     	if(!phone.isCorrect()) throw new IllegalArgumentException();
-   		request.setAttribute("mode", "find");
-    	request.setAttribute("message", "Результаты поиска для 'Тедефон' = '"+phone+"'.");
-		showUsers(UserServiceFactory.getNewUserService().findByPhone(phone), request, response);
+    	request.setAttribute("findMode", "'Тедефон' = '"+phone+"'.");
+		showUsers(UserServiceFactory.getNewUserService().findByPhone(phone), "find", request, response);
 		return true;
     }
     
@@ -97,9 +93,8 @@ public class FindUsersServlet extends HttpServlet {
     	if(!findMode.equals("BY_AGE")) return false;
     	Integer age = loadAsInteger("age", request);
    		if(age == null) throw new IllegalArgumentException();
-   		request.setAttribute("mode", "find");
-		request.setAttribute("message", "Результаты поиска для 'Возраст' = '"+age+"'.");
-		showUsers(UserServiceFactory.getNewUserService().findByAge(age), request, response);
+		request.setAttribute("findMode", "'Возраст' = '"+age+"'.");
+		showUsers(UserServiceFactory.getNewUserService().findByAge(age), "find", request, response);
 		return true;
     }
     
@@ -108,9 +103,8 @@ public class FindUsersServlet extends HttpServlet {
     	if(!findMode.equals("BY_GENDER")) return false;
     	Gender gender = Gender.identify(request.getParameter("gender"));
     	String genderStr = (gender == Gender.MAN) ? "Мужской" : "Женский";
-   		request.setAttribute("mode", "find");
-		request.setAttribute("message", "Результаты поиска для 'Пол' = '"+genderStr+"'.");
-		showUsers(UserServiceFactory.getNewUserService().findByGender(gender), request, response);
+		request.setAttribute("findMode", "'Пол' = '"+genderStr+"'.");
+		showUsers(UserServiceFactory.getNewUserService().findByGender(gender), "find", request, response);
 		return true;
     }
     

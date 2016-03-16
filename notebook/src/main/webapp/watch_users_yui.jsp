@@ -65,29 +65,37 @@
 			</div>    
 		</c:when>
 		<c:otherwise>
+			<c:choose>
+			   	<c:when test="${mode == 'find'}">
+					<c:set var="tableCaption">Результаты поиска для ${findMode}</c:set>
+				</c:when>
+				<c:otherwise>
+					<c:set var="tableCaption">Таблица пользователей</c:set>
+				</c:otherwise>
+			</c:choose>
+			<div align="center">
+				<h2> <c:out value="${tableCaption}"/> </h2>
+			</div>    
 			<div id="idUsersTable" align="center">
 			</div>
 		</c:otherwise>
 	</c:choose>
 
-
+	<div align="center">
+	    <c:if test="${mode == 'edit' && !users.isEmpty()}">
+			<h3><font color="blue">Выберите пользователя для редактирования.</font></h3>
+			<h5>Редактирование доступно через контекстное меню.</h5> 
+		</c:if>
+	</div>
+	
 <script type="text/javascript">
 YAHOO.example.Data = { 
 	    usersSet: [ 
-	    		  	<c:forEach items="${users}" var="user">
-		                {	id: +"${user.id}", 
-		                	surname: "${user.surname}", 
-		                	name: "${user.name}", 
-		                	age: +"${user.age}", 
-							/*<c:choose>
-							    <c:when test="${user.gender == 'MAN'}">*/ gender: "Мужской", /*</c:when>
-							    <c:when test="${user.gender == 'WOMEN'}">*/ gender: "Женский", /*</c:when>
-							</c:choose>*/
-		                	phone: "${user.phone}"
-		                }, 
-	    		  	</c:forEach>
-		            ] 
-	} 
+	    		  	/* <c:forEach items="${users}" var="user"> */ 
+	    		  	{ id: +"${user.id}", surname: "${user.surname}", name: "${user.name}", age: +"${user.age}", /*<c:choose> <c:when test="${user.gender == 'MAN'}">*/ gender: "Мужской", /*</c:when> <c:when test="${user.gender == 'WOMEN'}">*/ gender: "Женский", /*</c:when> </c:choose>*/ phone: "${user.phone}" }, 
+	    		  	/* </c:forEach> */ 
+	    		  	] 
+	}
 </script>
 
 <script type="text/javascript">
@@ -109,7 +117,6 @@ YAHOO.util.Event.addListener(window, "load", function() {
         };
 
  		var myConfigs = { 
-			caption:"<h1>Заголовок таблицы<h1>",
 			sortedBy:{key:"id", dir:"asc"},
 			draggableColumns:true,
             paginator: new YAHOO.widget.Paginator({
@@ -125,7 +132,7 @@ YAHOO.util.Event.addListener(window, "load", function() {
 
         myDataTable.subscribe("rowMouseoverEvent", myDataTable.onEventHighlightRow);
         myDataTable.subscribe("rowMouseoutEvent", myDataTable.onEventUnhighlightRow);
-        //myDataTable.subscribe("rowClickEvent", myDataTable.onEventSelectRow);
+        myDataTable.subscribe("rowClickEvent", myDataTable.onEventSelectRow);
         
         // Programmatically select the first row
         //myDataTable.selectRow(myDataTable.getTrEl(0));
@@ -141,20 +148,14 @@ YAHOO.util.Event.addListener(window, "load", function() {
                     switch(task.index) {
                         case 0:     // Delete row upon confirmation
                             var oRecord = p_myDataTable.getRecord(elRow);
-                            if(confirm("Are you sure you want to delete ID " +
-                                    oRecord.getData("id") + " (" +
-                                    oRecord.getData("surname") + ")?")) {
-                                //p_myDataTable.deleteRow(elRow);
-                                
-                            	post('/NoteBook/upd_users', {id: oRecord.getData("id"), update:true });
-                            }
+                           	post('/NoteBook/upd_users', {id: oRecord.getData("id"), update:true });
                     }
                 }
             }
         };
 
         var myContextMenu = new YAHOO.widget.ContextMenu("mycontextmenu", {trigger:myDataTable.getTbodyEl()});
-        myContextMenu.addItem("Delete Item");
+        myContextMenu.addItem("Редактировать");
         // Render the ContextMenu instance to the parent container of the DataTable
         myContextMenu.render("idUsersTable");
         myContextMenu.clickEvent.subscribe(onContextMenuClick, myDataTable);

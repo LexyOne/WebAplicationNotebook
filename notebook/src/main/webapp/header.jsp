@@ -12,11 +12,15 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 	<title>Your NoteBook</title>
+	<style type="text/css"> body { margin:0; padding:0; } </style>
+	<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/fonts/fonts-min.css" />
 </head>
 
 <body>
-	
-	<div align="center"><h1>"Ваша записная книжка!!!"</h1></div>
+
+	<div align="center">
+		<font face="Times New Roman" size="7">Ваша записная книжка</font><br/><br/>
+	</div>
 
 	<div align="center">
 	
@@ -50,6 +54,7 @@
 						onclick="location.href='find_users';"
 						>  Найти   </button>
 						
+		<br/><br/>
  	</div>
 	
 </body>

@@ -28,152 +28,157 @@
 		<c:set var="hiddenIfNotError">hidden</c:set>
     </c:if>
     
-    <h3> <p ${hiddenIfNotError} align="center">
-    <font color="red"> <br/> Ошибка: ${error} </font> 
-    </p> </h3>
-	
-	<form name="user_form" action="/NoteBook/save_users" method="POST" onsubmit="return validate_user();" autocomplete="off">
-	
-		<input 	name="mode"
-				value="${mode}"
-				hidden 
-				/>
 
-		<table align="center">
-
-			<c:choose>
-			    <c:when test="${mode == 'add'}">
-					<caption><h2>Добавление нового пользователя</h2></caption>
-			    </c:when>
-			    <c:otherwise>
-					<caption><h2>Редактирование пользователя</h2></caption>
-			    </c:otherwise>
-			</c:choose>
-
-			<col width="150" span="1">
-			<col width="300" span="1">
-
-		  	<tbody bgcolor="#e8e8e8"> 
-		  	
-				<tr ${hiddenIfAddMode}>
-					<td>Уникальный номер:</td>
-					<td>
-						<input 	name="id"
-								value="${user.id}" 
-								style="width: 100%;"
-								readonly 
-						/>
-					</td>
-				</tr>
-				 
-				<tr>
-					<td>Фамилия:</td>
-					<td>
-						<input 	name="surname" 
-								value="${user.surname}" 
-								style="width: 100%;" 
-								placeholder="Фамилия"
-								maxlength="<%= User.MAX_SURNAME_LENGTH %>" 
-								required 
-						/>
-					</td>
-				</tr>
-				
-				<tr>
-					<td>Имя:</td>
-					<td>
-						<input 	name="name" 
-								value="${user.name}" 
-								style="width: 100%;" 
-								placeholder="Имя"
-								maxlength="<%= User.MAX_NAME_LENGTH %>" 
-								required 
-						/>
-					</td>
-				</tr>
-				
-				<tr>
-					<td>Телефон:</td>
-					<td>
-						<input 	name="phone" 
-								value="${user.phone}" 
-								style="width: 100%;" 
-								placeholder="<%= Phone.getHintPattern() %>"
-								<%--
-									pattern="<%= Phone.getRegexPattern() %>"
-								--%>
-								required 
-						/>
-					</td>
-				</tr>
-				
-				<tr>
-					<td>Возраст:</td>
-					<td>
-						<select	name="age"
-								style="width: 100%;" 
-								required 
-								>
-							<c:choose>
-							    <c:when test="${null == user.age}">
-									<option selected disabled value=""></option>
-							    </c:when>
-							    <c:otherwise>
-									<option disabled></option>
-							    </c:otherwise>
-							</c:choose>
-							<c:forEach var="ageValue" begin="<%= User.MIN_AGE %>" end="<%= User.MAX_AGE %>">
+    <div align="center" ${hiddenIfNotError}>
+		<br/><br/>
+		<font face="Times New Roman" size="5" color="red">Ошибка: ${error}</font><br/>
+		<br/><br/>
+    </div>
+    
+   <div align="center">
+		<form name="user_form" action="/NoteBook/save_users" method="POST" onsubmit="return validate_user();" autocomplete="off">
+		
+			<input 	name="mode"
+					value="${mode}"
+					hidden 
+					/>
+			
+			<table>
+			
+				<c:choose>
+				    <c:when test="${mode == 'add'}">
+						<caption><h2>Добавление нового пользователя</h2></caption>
+				    </c:when>
+				    <c:otherwise>
+						<caption><h2>Редактирование пользователя</h2></caption>
+				    </c:otherwise>
+				</c:choose>
+			
+				<col width="150" span="1">
+				<col width="300" span="1">
+			
+			  	<tbody bgcolor="#e8e8e8"> 
+			  	
+					<tr ${hiddenIfAddMode}>
+						<td>Уникальный номер:</td>
+						<td>
+							<input 	name="id"
+									value="${user.id}" 
+									style="width: 100%;"
+									readonly 
+							/>
+						</td>
+					</tr>
+					 
+					<tr>
+						<td>Фамилия:</td>
+						<td>
+							<input 	name="surname" 
+									value="${user.surname}" 
+									style="width: 100%;" 
+									placeholder="Фамилия"
+									maxlength="<%= User.MAX_SURNAME_LENGTH %>" 
+									required 
+							/>
+						</td>
+					</tr>
+					
+					<tr>
+						<td>Имя:</td>
+						<td>
+							<input 	name="name" 
+									value="${user.name}" 
+									style="width: 100%;" 
+									placeholder="Имя"
+									maxlength="<%= User.MAX_NAME_LENGTH %>" 
+									required 
+							/>
+						</td>
+					</tr>
+					
+					<tr>
+						<td>Телефон:</td>
+						<td>
+							<input 	name="phone" 
+									value="${user.phone}" 
+									style="width: 100%;" 
+									placeholder="<%= Phone.getHintPattern() %>"
+									<%--
+										pattern="<%= Phone.getRegexPattern() %>"
+									--%>
+									required 
+							/>
+						</td>
+					</tr>
+					
+					<tr>
+						<td>Возраст:</td>
+						<td>
+							<select	name="age"
+									style="width: 100%;" 
+									required 
+									>
 								<c:choose>
-								    <c:when test="${ageValue == user.age}">
-										<option selected value="${ageValue}">${ageValue}</option>
+								    <c:when test="${null == user.age}">
+										<option selected disabled value=""></option>
 								    </c:when>
 								    <c:otherwise>
-										<option value="${ageValue}">${ageValue}</option>
+										<option disabled></option>
 								    </c:otherwise>
 								</c:choose>
-							</c:forEach>
-						</select>
-					</td>
-				</tr>
-				
-				<tr>
-					<td>Пол:</td>
-					<td>
-						<select	name="gender"
-								style="width: 100%;" 
-								required 
-								>
-							<c:choose>
-							    <c:when test="${user.gender == 'MAN'}">
-									<option disabled></option>
-									<option value="M" selected> Мужской </option>
-									<option value="W"> Женский </option>
-							    </c:when>
-							    <c:when test="${user.gender == 'WOMEN'}">
-									<option disabled></option>
-									<option value="M"> Мужской </option>
-									<option value="W" selected> Женский </option>
-							    </c:when>
-							    <c:otherwise>
-									<option disabled selected></option>
-									<option value="M"> Мужской </option>
-									<option value="W"> Женский </option>
-							    </c:otherwise>
-							</c:choose>
-						</select>
-					</td>
-				</tr>
-				
-		  	</tbody>
-
-		</table>
-
-		<p align="center">
-			<button name="save" value="true" style="width:120px" title="Сохранить пользователя"> Сохранить </button>
-			<button type="reset" style="width:120px" title="Очистить введенные данные"> Очистить </button>
-		</p>
-	
-	</form>
+								<c:forEach var="ageValue" begin="<%= User.MIN_AGE %>" end="<%= User.MAX_AGE %>">
+									<c:choose>
+									    <c:when test="${ageValue == user.age}">
+											<option selected value="${ageValue}">${ageValue}</option>
+									    </c:when>
+									    <c:otherwise>
+											<option value="${ageValue}">${ageValue}</option>
+									    </c:otherwise>
+									</c:choose>
+								</c:forEach>
+							</select>
+						</td>
+					</tr>
+					
+					<tr>
+						<td>Пол:</td>
+						<td>
+							<select	name="gender"
+									style="width: 100%;" 
+									required 
+									>
+								<c:choose>
+								    <c:when test="${user.gender == 'MAN'}">
+										<option disabled></option>
+										<option value="M" selected> Мужской </option>
+										<option value="W"> Женский </option>
+								    </c:when>
+								    <c:when test="${user.gender == 'WOMEN'}">
+										<option disabled></option>
+										<option value="M"> Мужской </option>
+										<option value="W" selected> Женский </option>
+								    </c:when>
+								    <c:otherwise>
+										<option disabled selected></option>
+										<option value="M"> Мужской </option>
+										<option value="W"> Женский </option>
+								    </c:otherwise>
+								</c:choose>
+							</select>
+						</td>
+					</tr>
+					
+			  	</tbody>
+			
+			</table>
+			
+			<p align="center">
+				<button name="save" value="true" style="width:120px" title="Сохранить пользователя"> Сохранить </button>
+				<button type="reset" style="width:120px" title="Сбросить введенные данные"> Сбросить </button>
+				</p>
+			
+		</form>
+   </div>
 	
 </body>
 

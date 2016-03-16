@@ -19,7 +19,7 @@ public class WatchUsersServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		try {
-			showUsers(UserServiceFactory.getNewUserService().getAll(), request, response);
+			showUsers(UserServiceFactory.getNewUserService().getAll(), "watch", request, response);
 		} catch (Exception e) {
 			showError("Ошибка соединеня с базой данных.", request, response);
 		}

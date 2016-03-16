@@ -11,8 +11,9 @@ import com.lexyone.test.webapp.notebook.datasource.entities.User;
 
 public class RequestDispatcher {
 
-    public static void showUsers(List<User> users, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public static void showUsers(List<User> users, String mode, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setAttribute("users", users);
+		request.setAttribute("mode", mode);
 		forward("/watch_users_yui.jsp", request, response);
     }
     

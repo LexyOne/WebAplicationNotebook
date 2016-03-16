@@ -17,9 +17,9 @@
 
 <body>
 	<%@ include file="/header.jsp" %>
-	<p align="center">
-		<img src="${pageContext.request.contextPath}/resources/notebook.jpg" alt="notebook" />
-	</p>
+	<div align="center">
+		<img src="${pageContext.request.contextPath}/resources/notebook.jpg" alt="notebook" /><br/><br/>
+	</div>
 </body>
 
 </html>

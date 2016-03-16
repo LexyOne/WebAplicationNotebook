@@ -19,93 +19,116 @@
 
 	<%@ include file="/header.jsp" %>
 	
-    <c:if test="${message == null}">
-		<c:set var="hiddenIfNoMessage">hidden</c:set>
+    <c:if test="${message != null}">
+		<div align="center">
+			<h3><font color="blue"> ${message} </font></h3><br/>
+		</div>    
     </c:if>
-    
-    <h3> <p ${hiddenIfNoMessage} align="center">
-    <font color="blue"> <br/> ${message} </font> 
-    </p> </h3>
 
-    <c:if test="${(mode == 'find') && users.isEmpty()}">
-		<c:set var="hiddenIfFindModeAndNothingFound">hidden</c:set>
-	    <h2> <p align="center">
-	    По вашему запросу ничего не найдено. 
-	    </p> </h2>
-    </c:if>
-    
-	<table align="center" ${hiddenIfFindModeAndNothingFound}>
-	
-		<c:choose>
-		    <c:when test="${mode == 'find'}">
-				<caption><h2>Результаты поиска</h2></caption>
-		    </c:when>
-		    <c:otherwise>
-				<caption><h2>Таблица пользователей</h2></caption>
-		    </c:otherwise>
-		</c:choose>
-		
-		<col width="80" span="1">
-		<col width="200" span="2">
-		<col width="80" span="1">
-		<col width="100" span="1">
-		<col width="150" span="1">
-		
-		<thead bgcolor="silver">
-		<tr valign="middle" align="center">
-	   		<td>
-	   			Номер
-	   		</td>
-	   		<td>
-	   			Фамилия
-	   		</td>
-	   		<td>
-	   			Имя
-	   		</td>
-	   		<td>
-	   			Возраст
-	   		</td>
-	   		<td>
-	   			Пол
-	   		</td>
-	   		<td>
-	   			Телефон
-	   		</td>
-	   		<td>
-	   		</td>
-	  	</tr>
-	  	</thead>
-	  
-	  	<tbody bgcolor="#e8e8e8">
 
-		  	<c:forEach items="${users}" var="user">
+	<c:choose>
+	   	<c:when test="${users.isEmpty()}">
+			<div align="center">
+				<c:choose>
+				    <c:when test="${mode == 'find'}"> <h2> По вашему запросу ничего не найдено. </h2> </c:when>
+				    <c:otherwise> <h2> Таблица пользователей пуста. </h2> </c:otherwise>
+				</c:choose>
+			</div>    
+		</c:when>
+		<c:otherwise>
+			<c:choose>
+			   	<c:when test="${mode == 'find'}">
+					<c:set var="tableCaption">Результаты поиска для ${findMode}</c:set>
+				</c:when>
+				<c:otherwise>
+					<c:set var="tableCaption">Таблица пользователей</c:set>
+				</c:otherwise>
+			</c:choose>
+			<div align="center">
+				<h2> <c:out value="${tableCaption}"/> </h2>
+			</div>    
+			<div id="idUsersTable" align="center">
+
+				<table>
+					<col width="80" span="1">
+					<col width="200" span="2">
+					<col width="80" span="1">
+					<col width="100" span="1">
+					<col width="150" span="1">
+					
+					<thead bgcolor="silver">
+					<tr valign="middle" align="center">
+				   		<td>
+				   			Номер
+				   		</td>
+				   		<td>
+				   			Фамилия
+				   		</td>
+				   		<td>
+				   			Имя
+				   		</td>
+				   		<td>
+				   			Возраст
+				   		</td>
+				   		<td>
+				   			Пол
+				   		</td>
+				   		<td>
+				   			Телефон
+				   		</td>
+				   		<td>
+				   		</td>
+				  	</tr>
+				  	</thead>
+				  
+				  	<tbody bgcolor="#e8e8e8">
+			
+					  	<c:forEach items="${users}" var="user">
+				
+						  	<tr>
+								<td>${user.id}</td>
+						   		<td>${user.surname}</td>
+						   		<td>${user.name}</td>
+						   		<td>${user.age}</td>
+						   		<td>
+									<c:choose>
+									    <c:when test="${user.gender == 'MAN'}"> Мужской </c:when>
+									    <c:when test="${user.gender == 'WOMEN'}"> Женский </c:when>
+									</c:choose>
+								</td>
+						   		<td>${user.phone}</td>
+						   		<td>
+									<form action="upd_users" method="POST">
+										<input 	name="id" value="${user.id}" readonly hidden />
+										<button name="update" title="Редактировать пользователя" value="true"> Редактировать </button>
+									</form>
+						   		</td>
+						  	</tr>
+				
+				
+					  	</c:forEach>
+				  
+				  	</tbody>
+				  
+				</table>
+
+			</div>
+		</c:otherwise>
+	</c:choose>
+
+	<div align="center">
+	    <c:if test="${mode == 'edit' && !users.isEmpty()}">
+			<h3><font color="blue">Выберите пользователя для редактирования.</font></h3>
+			<h5>Редактирование доступно по нажатию кнопки 'Редактировать'.</h5> 
+		</c:if>
+	</div>
 	
-			  	<tr>
-					<td>${user.id}</td>
-			   		<td>${user.surname}</td>
-			   		<td>${user.name}</td>
-			   		<td>${user.age}</td>
-			   		<td>
-						<c:choose>
-						    <c:when test="${user.gender == 'MAN'}"> Мужской </c:when>
-						    <c:when test="${user.gender == 'WOMEN'}"> Женский </c:when>
-						</c:choose>
-					</td>
-			   		<td>${user.phone}</td>
-			   		<td>
-						<form action="upd_users" method="POST">
-							<input 	name="id" value="${user.id}" readonly hidden />
-							<button name="update" title="Редактировать пользователя" value="true"> Изменить </button>
-						</form>
-			   		</td>
-			  	</tr>
 	
 	
-		  	</c:forEach>
-	  
-	  	</tbody>
-	  
-	</table>
+	
+	
+	
+	
 
 </body>
 

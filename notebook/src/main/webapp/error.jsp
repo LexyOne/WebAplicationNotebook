@@ -13,9 +13,13 @@
 
 <body>
 	<%@ include file="/header.jsp"%>
-	<br />
-	<h2 align="center"><font color="red">Ошибка!!!</font></h2>
-	<h3 align="center"><font color="red">${errorMessage}</font></h3>
+
+	<div align="center">
+		<br/><br/>
+		<font face="Times New Roman" size="6" color="red">Ошибка!!!</font><br/>
+		<font face="Times New Roman" size="5" color="red">${errorMessage}</font><br/>
+	</div>
+	
 </body>
 
 </html>
