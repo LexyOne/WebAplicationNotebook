@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:ivy="antlib:org.apache.ivy.ant" name="NotebookWebApp" default="main" basedir=".">
+	<description>
+		Create a web application Notebook (WAR) with Ant build script
+	</description>
+	
+	<property name="jdk.version" value="1.6" />
+	<property name="projectName" value="NotebookWebApp" />
+	<property name="src.dir" location="src" />
+	<property name="resources.dir" location="src/main/resources" />
+	<property name="webapp.dir" value="src/main/webapp" />		
+	<property name="webapp.webinf.dir" value="src/main/webapp/WEB-INF" />		
+	<property name="webapp.resources.dir" value="src/main/webapp/resources" />		
+	
+	<property name="target.dir" value="war" />
+	<property name="notebook.dir" value="${target.dir}/web-app" />	
+	<property name="notebook.resources.dir" value="${notebook.dir}/resources" />		
+	<property name="notebook.webinf.dir" location="${notebook.dir}/WEB-INF" />
+	<property name="notebook.classes.dir" location="${notebook.webinf.dir}/classes" />
+	<property name="notebook.lib.dir" value="${notebook.webinf.dir}/lib" />	
+	<property name="lib.dir" value="lib" /> 
+
+	<!-- Create folders -->
+	<target name="init">
+		<echo message="Make directories..." />
+		<mkdir dir="${target.dir}" />
+		<mkdir dir="${notebook.dir}" />
+		<mkdir dir="${notebook.lib.dir}" />
+		<mkdir dir="${notebook.classes.dir}" />
+		<mkdir dir="${notebook.resources.dir}" />		
+	</target>
+
+	<!-- install ivy -->
+	<target name="ivy" description="Install ivy">
+		<echo message="Install ivy..." />
+		<mkdir dir="${user.home}/.ant/lib" />
+		<get dest="${user.home}/.ant/lib/ivy.jar" 
+		src="http://search.maven.org/remotecontent?filepath=org/apache/ivy/ivy/2.4.0-rc1/ivy-2.4.0-rc1.jar" />
+	</target>
+
+	<!-- ivy resolve -->
+	<target name="resolve" description="retrieve dependencies with ivy" depends="ivy">
+		<echo message="Getting dependencies..." />
+		<ivy:retrieve />
+		<ivy:cachepath pathid="compile.path" conf="compile" />
+		<ivy:cachepath pathid="runtime.path" conf="runtime" />
+		<ivy:cachepath pathid="test.path" conf="test" />
+	</target>
+
+	<!-- Compile Java source from ${src.dir} and output it to ${notebook.classes.dir} -->
+	<target name="compile" description="compile source code" depends="init, resolve">
+		<echo message="Compile Java source from src.dir..." />
+		<javac srcdir="${src.dir}" destdir="${notebook.classes.dir}" source="${jdk.version}" target="${jdk.version}" 
+			debug="true" includeantruntime="false" classpathref="compile.path" encoding="UTF-8">
+		</javac>
+	</target>
+
+	<!-- Copy Java resources properties files from ${resources.dir} to ${notebook.classes.dir} -->
+	<target name="copy-resources-to-classes" description="copy Java resources properties files" depends="init">
+		<echo message="Copy Java resources properties files..." />
+		<copy todir="${notebook.classes.dir}">
+			<fileset dir="${resources.dir}">
+				<include name="**/*.properties" />
+			</fileset>
+		</copy>
+	</target>
+	
+	<!-- Copy jsp pages from ${webapp.dir} to ${notebook.dir} -->
+	<target name="copy-jsp" description="copy jsp pages to ${notebook.dir}" depends="init">
+		<echo message="Copy jsp pages..." />
+		<copy todir="${notebook.dir}">
+			<fileset dir="${webapp.dir}">
+				<include name="**/*.jsp" />
+			</fileset>
+		</copy>
+	</target>
+
+	<!-- Copy all resources files from ${webapp.dir}/resources to ${notebook.dir}/resources -->
+	<target name="copy-resources" description="copy all resources files to notebook.dir" depends="init">
+		<echo message="Copy all resources files..." />
+		<copy todir="${notebook.resources.dir}">
+			<fileset dir="${webapp.resources.dir}">
+				<include name="**/*.*" />
+			</fileset>
+		</copy>
+	</target>
+		
+	<!-- Create the final WAR file for deployment -->
+	<target name="package" depends="compile, copy-resources-to-classes, copy-jsp, copy-resources" description="create a war file">
+		<echo message="Create the final WAR file..." />
+
+		<!-- ivy get dependencies and put it in ${lib.dir} -->
+		<ivy:retrieve pattern="${lib.dir}/[artifact]-[revision].[ext]" />
+
+		<delete file="${target.dir}/web-app.war" />
+		
+		<war destfile="${target.dir}/web-app.war" webxml="${webapp.dir}/WEB-INF/web.xml">
+			<webinf dir="${notebook.dir}/WEB-INF" />
+			<lib dir="${lib.dir}" />
+			
+			<fileset dir="${notebook.dir}">
+				<include name="**/*.jsp" />
+			</fileset>
+			
+			<zipfileset dir="${notebook.dir}/resources" prefix="resources" />
+		</war>
+	</target>
+
+	<!-- Delete temporary folders -->
+	<target name="clean" description="clean up">
+		<echo message=" Delete temporary folders..." />
+		<delete dir="${notebook.dir}" />
+		<delete dir="${lib.dir}" />
+	</target>
+	
+	<target name="main" depends="package, clean" />
+	
+</project>

@@ -1,0 +1,18 @@
+<ivy-module version="2.0">
+	<info organisation="org.apache" module="ivy-dependencies" />
+	
+	<configurations>
+        <conf name="compile" description="compile dependencies"/>
+        <conf name="runtime" description="runtime dependencies" extends="compile"/>
+        <conf name="test"    description="test dependencies" extends="runtime"/>
+    </configurations>
+    
+	<dependencies>
+		<dependency org="org.eclipse.jetty" name="jetty-server" rev="9.2.11.v20150529" conf="compile->default"/>
+		<dependency org="org.eclipse.jetty" name="jetty-webapp" rev="9.2.11.v20150529" conf="compile->default"/>
+		<dependency org="org.eclipse.jetty" name="jetty-annotations" rev="9.2.11.v20150529" conf="compile->default"/>
+		<dependency org="org.eclipse.jetty" name="apache-jsp" rev="9.2.11.v20150529" conf="compile->default"/>
+		<dependency org="jstl" name="jstl" rev="1.2" conf="compile->default"/>
+		<dependency org="org.firebirdsql.jdbc" name="jaybird-jdk18" rev="2.2.9" conf="compile->default"/>
+	</dependencies>
+</ivy-module>
