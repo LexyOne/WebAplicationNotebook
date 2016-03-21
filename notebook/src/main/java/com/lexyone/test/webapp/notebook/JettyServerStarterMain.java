@@ -3,17 +3,10 @@ package com.lexyone.test.webapp.notebook;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
 
-import com.lexyone.test.webapp.notebook.datasource.ConnectionPool;
-
 public class JettyServerStarterMain {
 
 	public static void main(String[] args) {
 		
-		try {
-			ConnectionPool.getInstance();
-		} catch (Exception e) {
-		}
-
 		// 1. Creating the server on port 8080
 		Server server = new Server(8080);
 
